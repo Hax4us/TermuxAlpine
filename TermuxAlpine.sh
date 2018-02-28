@@ -1,7 +1,7 @@
-#!/data/data/com.termux/files/usr/bin/bash -e
-# Copyright ©2018 by Hax4Us. All rights reserved.  🌎 🌍 🌏 🌐 🗺
+#!/data/data/com.termux/files/usr/bin/bash
+# Copyright ©2018 by Hax4Us. All rights reserved.🗺
 #
-# https://sdrausty.github.io/TermuxAlpine/README has information about this project. 
+# https://hax4us.com
 ################################################################################
 
 # colors
