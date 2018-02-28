@@ -268,7 +268,7 @@ getsha() {
 	if [ $SETARCH = "aarch64" ]
 		then
 		curl --progress-bar -L --fail --retry 4 -O "$URL$SETSHA"
-	elif [ $SETARCH = "arm" ]
+	elif [ $SETARCH = "armhf" ]
 		then
 	curl --progress-bar -L --fail --retry 4 -O "$URL$SETSHA"
 	elif [ $SETARCH = "x86" ]
@@ -277,6 +277,9 @@ getsha() {
 	elif [ $SETARCH = "x86_64" ]
 		then
 		curl --progress-bar -L --fail --retry 4 -O "$URL$SETSHA"
+	else 
+		printf "$red Your phone is supported but cant download SHA file plz contact to lokesh@hax4us.com $reset"
+		exit
 	fi
 
 }
