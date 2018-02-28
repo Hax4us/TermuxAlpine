@@ -1,5 +1,5 @@
-#!/data/data/com.termux/files/usr/bin/bash
-# Copyright ©2018 by Hax4Us. All rights reserved.🗺
+#!/data/data/com.termux/files/usr/bin/bash -e
+# Copyright ©2018 by Hax4Us. All rights reserved.  🌎 🌍 🌏 🌐 🗺
 #
 # https://hax4us.com
 ################################################################################
@@ -119,7 +119,7 @@ elif [ $SETARCH = "armhf" ]
 			curl --progress-bar -L --fail --retry 4 -O "$URL"
 			setsha
 			getsha
-			checkintegrityi
+			checkintegrity
 			elif [ $SETARCH = "x86" ]
 				then
                 	URL=$urlx86
@@ -212,7 +212,7 @@ checkdeps() {
 		then
 			echo "  • Proot is OK"
 		else
-			apt install proot &> /dev/null
+			apt install proot -y &> /dev/null
 	if [ ! -e $PREFIX/bin/proot ]
 		then
 			printf "$red \n"
@@ -294,8 +294,40 @@ else
 	fi
 }
 
+# Utility function for cleanup
+
+cleanup() {
+	if [ -d $DESTINATION ]
+		then
+	rm -rf $DESTINATION
+else
+	printf "$red not installed so not removed"
+	echo
+	fi
+	if [ -e $PREFIX/bin/startalpine ]
+		then
+	rm $PREFIX/bin/startalpine
+	printf "$yellow uninstalled :) $reset"
+	echo
+else
+	printf "$red not installed so not removed $reset"
+	echo
+	fi
+
+}
+
 # Start
 clear
+#EXTRAARGS="default"
+#if [[ ! -z $1 ]]
+#	then
+#EXTRAARGS=$1
+#if [[ $EXTRAARGS = "uninstall" ]]
+#	then
+#		cleanup
+#		exit
+#		fi
+#		fi
 echo
 printf "$yellow You are going to install Alpine in termux ;) Cool"
 echo
