@@ -1,15 +1,15 @@
 # TermuxAlpine
 
-_powered by_**
+#### _powered by_
 
 ![powered by Alpine](../master/docs/images/alpinelinux-logo.svg)
 
 ![Optional Text](../master/docs/images/ss.png)
 
+
 This Termux bash setup shell script will attempt to set Arch Linux up in your Termux environment.
 
-## _Steps For Installation_**
-==========================
+## _Steps For Installation_
 1. First goto home directory
 `cd $HOME`
 2. Get the script
@@ -30,4 +30,5 @@ This Termux bash setup shell script will attempt to set Arch Linux up in your Te
 #### here is full usage details of apk [https://wiki.alpinelinux.org/wiki/Alpine_Linux_package_management]
 
 Comments are welcome at https://github.com/Hax4us/TermuxAlpine/issues ✍
+
 Pull requests are welcome https://github.com/Hax4us/TermuxAlpine/pulls ✍
