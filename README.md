@@ -7,7 +7,7 @@
 ![Optional Text](../master/docs/images/ss.png)
 
 
-This Termux bash setup shell script will attempt to set Arch Linux up in your Termux environment.
+This Termux bash setup shell script will attempt to set Alpine Linux up in your Termux environment.
 
 ## _Steps For Installation_
 1. First goto home directory
@@ -26,6 +26,12 @@ This Termux bash setup shell script will attempt to set Arch Linux up in your Te
 `apk update`
 2. Now you can install any package by
 `apk add package_name`
+
+## Size Comparision
+Size  | Alpine  | Arch | Ubuntu
+--- | --- | --- | ---
+before installation | Around 1 MB 😱  | Around 400 MB | Around 35 MB
+after installation | Around 80 MB | Around 2000 MB | Around 1200 MB
 
 #### here is full usage details of apk [https://wiki.alpinelinux.org/wiki/Alpine_Linux_package_management]
 
