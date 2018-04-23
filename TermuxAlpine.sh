@@ -132,7 +132,7 @@ EOM
 
 finalwork() {
 	[ ! -e ${HOME}/finaltouchup.sh ] && curl --silent -LO https://raw.githubusercontent.com/Hax4us/TermuxAlpine/master/finaltouchup.sh
-	./finaltouchup.sh
+chmod +x finaltouchup && ./finaltouchup.sh
 }
 
 
