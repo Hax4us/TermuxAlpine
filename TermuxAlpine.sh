@@ -129,7 +129,7 @@ createloginfile() {
 	cat > $bin <<- EOM
 #!$usrbin/bash -e
 unset LD_PRELOAD
-exec proot --link2symlink -0 -r ${HOME}/TermuxAlpine/ -b /vendor -b /var/run -b /dev/ -b /sys/ -b /proc/ -b /storage/ -b $HOME -w $HOME /usr/bin/env -i HOME=/root TERM="$TERM" LANG=$LANG PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/sh --login
+exec proot --link2symlink -0 -r ${HOME}/TermuxAlpine/ -b /dev/ -b /sys/ -b /proc/ -b /storage/ -b $HOME -w $HOME /usr/bin/env -i HOME=/root TERM="$TERM" LANG=$LANG PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/sh --login
 EOM
 
 	chmod 700 $bin
