@@ -14,6 +14,12 @@ reset='\033[0m'
 
 # Destination
 
+if [ -n "$SHELL" ]
+then
+	usrbin=$(dirname $SHELL)
+else
+	usrbin=${PREFIX}/bin
+fi
 DESTINATION=${HOME}/TermuxAlpine
 [ -d $DESTINATION ] && rm -rf $DESTINATION
 mkdir $DESTINATION
@@ -60,7 +66,8 @@ checkdeps() {
 	echo " [*] Checking for all required tools..."
 
 	for i in proot bsdtar curl; do
-		if [ -e $PREFIX/bin/$i ]; then
+		pgm=$(type -p $i)
+		if [ -e $pgm ]; then
 			echo "  • $i is OK"
 		else
 			echo "Installing ${i}..."
@@ -118,9 +125,9 @@ extract() {
 # Utility function for login file
 
 createloginfile() {
-	bin=${PREFIX}/bin/startalpine
+	bin=${usrbin}/startalpine
 	cat > $bin <<- EOM
-#!/data/data/com.termux/files/usr/bin/bash -e
+#!$usrbin/bash -e
 unset LD_PRELOAD
 exec proot --link2symlink -0 -r ${HOME}/TermuxAlpine/ -b /dev/ -b /sys/ -b /proc/ -b /storage/ -b $HOME -w $HOME /usr/bin/env -i HOME=/root TERM="$TERM" LANG=$LANG PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/sh --login
 EOM
@@ -131,7 +138,8 @@ EOM
 # Utility function to touchup Alpine
 
 finalwork() {
-	[ ! -e ${HOME}/finaltouchup.sh ] && curl --silent -LO https://raw.githubusercontent.com/Hax4us/TermuxAlpine/master/finaltouchup.sh
+	[ ! -e ${HOME}/finaltouchup.sh ] && curl --silent -L https://raw.githubusercontent.com/Hax4us/TermuxAlpine/master/finaltouchup.sh | \
+		sed -e "s,^!#.*bash,$usrbin/bash,g" > finaltouchup.sh
 chmod +x finaltouchup.sh && ./finaltouchup.sh
 }
 
@@ -146,8 +154,9 @@ cleanup() {
 		printf "$red not installed so not removed${reset}\n"
 		exit
 	fi
-	if [ -e $PREFIX/bin/startalpine ]; then
-		rm $PREFIX/bin/startalpine
+	spgm=$(type -p startalpine)
+	if [ $? -eq 0 ]; then
+		rm $spgm
 		printf "$yellow uninstalled :) ${reset}\n"
 		exit
 	else
