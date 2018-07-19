@@ -38,12 +38,12 @@ updrepos() {
 	EOM
 }
 # thnx to @j16180339887 for DNS picker 
-addresolvconf ()
-{
-	[ $(command -v getprop) ] && getprop | sed -n -e 's/^\[net\.dns.\]: \[\(.*\)\]/\1/p' | sed '/^\s*$/d' | sed 's/^/nameserver /' > $HOME/TermuxAlpine/etc/resolv.conf
-}
+#addresolvconf ()
+#{
+#	[ $(command -v getprop) ] && getprop | sed -n -e 's/^\[net\.dns.\]: \[\(.*\)\]/\1/p' | sed '/^\s*$/d' | sed 's/^/nameserver /' > $HOME/TermuxAlpine/etc/resolv.conf
+#}
 
 addprofile
 addmotd
-addresolvconf
+#addresolvconf
 updrepos
