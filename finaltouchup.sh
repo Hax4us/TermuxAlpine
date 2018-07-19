@@ -29,14 +29,21 @@ addmotd() {
 						EOM
 }
 
+updrepos() {
+	cp $HOME/TermuxAlpine/etc/apk/repositories $HOME/TermuxAlpine/etc/apk/repositories.bak
+	cat > $HOME/TermuxAlpine/etc/apk/repositories <<- EOM
+	http://dl-cdn.alpinelinux.org/alpine/latest-stable/main/
+	http://dl-cdn.alpinelinux.org/alpine/latest-stable/community/
+	http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+	EOM
+}
+# thnx to @j16180339887 for DNS picker 
 addresolvconf ()
 {
-	cat > $HOME/TermuxAlpine/etc/resolv.conf <<- EOM
-	nameserver 8.8.8.8
-	nameserver 8.8.4.4
-	EOM
+	[ $(command -v getprop) ] && getprop | sed -n -e 's/^\[net\.dns.\]: \[\(.*\)\]/\1/p' | sed '/^\s*$/d' | sed 's/^/nameserver /' > $HOME/TermuxAlpine/etc/resolv.conf
 }
 
 addprofile
 addmotd
 addresolvconf
+updrepos
