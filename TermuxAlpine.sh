@@ -1,5 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash -e
-# Copyright Â©2018 by Hax4Us. All rights reserved.  ðŸŒŽ ðŸŒ ðŸŒ ðŸŒ ðŸ—º
+# Copyright ©2018 by Hax4Us. All rights reserved.  🌎 🌍 🌏 🌐 🗺
 #
 # https://hax4us.com
 ################################################################################
@@ -61,7 +61,7 @@ checkdeps() {
 
 	for i in proot bsdtar curl; do
 		if [ -e $PREFIX/bin/$i ]; then
-			echo "  â€¢ $i is OK"
+			echo "  • $i is OK"
 		else
 			echo "Installing ${i}..."
 			apt install -y $i || {
@@ -126,6 +126,12 @@ createloginfile() {
 	cat > $bin <<- EOM
 #!/data/data/com.termux/files/usr/bin/bash -e
 unset LD_PRELOAD
+# thnx to @j16180339887 for DNS picker
+addresolvconf ()
+{ 
+  [ $(command -v getprop) ] && getprop | sed -n -e 's/^\[net\.dns.\]: \[\(.*\)\]/\1/p' | sed '/^\s*$/d' | sed 's/^/nameserver /' > $HOME/TermuxAlpine/etc/resolv.conf
+}
+addresolvconf
 exec proot --link2symlink -0 -r ${HOME}/TermuxAlpine/ -b /dev/ -b /sys/ -b /proc/ -b /storage/ -b $HOME -w $HOME /usr/bin/env -i HOME=/root TERM="$TERM" LANG=$LANG PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/sh --login
 EOM
 
@@ -202,9 +208,9 @@ printline
 printf "\n${yellow} Now you can enjoy a very small (just 1 MB!) Linux environment in your Termux :)\n Don't forget to like my hard work for termux and many other things\n"
 printline
 printline
-printf "\n${blue} [∆] Email   :${yellow}    lkpandey950@gmail.com\n"
-printf "$blue [∆] Website :${yellow}    https://hax4us.com\n"
-printf "$blue [â YouTube :${yellow}    https://youtube.com/hax4us\n"
+printf "\n${blue} [�] Email   :${yellow}    lkpandey950@gmail.com\n"
+printf "$blue [�] Website :${yellow}    https://hax4us.com\n"
+printf "$blue [�] YouTube :${yellow}    https://youtube.com/hax4us\n"
 printline
 printf "$red \n NOTE : $yellow use ${red}--uninstall${yellow} option for uninstall\n"
 printline
