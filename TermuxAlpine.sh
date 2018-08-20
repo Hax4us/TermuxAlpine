@@ -61,7 +61,7 @@ checkdeps() {
 
 	for i in proot bsdtar curl; do
 		if [ -e $PREFIX/bin/$i ]; then
-			echo "  â€¢ $i is OK"
+			echo " • $i is OK"
 		else
 			echo "Installing ${i}..."
 			apt install -y $i || {
