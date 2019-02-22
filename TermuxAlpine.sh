@@ -1,5 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash -e
-# Copyright ©2018 by Hax4Us. All rights reserved.  🌎 🌍 🌏 🌐 🗺
+# Copyright Â©2018 by Hax4Us. All rights reserved.  ðŸŒŽ ðŸŒ ðŸŒ ðŸŒ ðŸ—º
 #
 # https://hax4us.com
 ################################################################################
@@ -14,12 +14,6 @@ reset='\033[0m'
 
 # Destination
 
-if [ -n "$SHELL" ]
-then
-	usrbin=$(dirname $SHELL)
-else
-	usrbin=${PREFIX}/bin
-fi
 DESTINATION=${HOME}/TermuxAlpine
 [ -d $DESTINATION ] && rm -rf $DESTINATION
 mkdir $DESTINATION
@@ -31,7 +25,7 @@ unknownarch() {
 	printf "$red"
 	echo "[*] Unknown Architecture :("
 	printf "$reset"
-	exit
+	exit 1
 }
 
 # Utility function for detect system
@@ -66,16 +60,15 @@ checkdeps() {
 	echo " [*] Checking for all required tools..."
 
 	for i in proot bsdtar curl; do
-		pgm=$(type -p $i)
-		if [ -e $pgm ]; then
-			echo "  • $i is OK"
+		if [ -e $PREFIX/bin/$i ]; then
+			echo " • $i is OK"
 		else
 			echo "Installing ${i}..."
 			apt install -y $i || {
 				printf "$red"
 				echo " ERROR: check your internet connection or apt\n Exiting..."
 				printf "$reset"
-				exit
+				exit 1
 			}
 		fi
 	done
@@ -84,7 +77,11 @@ checkdeps() {
 # URLs of all possibls architectures
 
 seturl() {
-	URL="https://nl.alpinelinux.org/alpine/v3.7/releases/${1}/alpine-minirootfs-3.7.0-${1}.tar.gz"
+	ALPINE_VER=$(curl -s http://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/$SETARCH/latest-releases.yaml | grep -m 1 -o version.* | sed -e 's/[^0-9.]*//g' -e 's/-$//')
+	if [ -z "$ALPINE_VER" ] ; then
+		exit 1
+	fi
+	ALPINE_URL="http://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/$SETARCH/alpine-minirootfs-$ALPINE_VER-$SETARCH.tar.gz"
 }
 
 # Utility function to get tar file
@@ -92,15 +89,15 @@ seturl() {
 gettarfile() {
 	printf "$blue [*] Getting tar file...$reset\n\n"
 	seturl $SETARCH
-	curl --progress-bar -L --fail --retry 4 -O "$URL"
-	rootfs="alpine-minirootfs-3.7.0-${SETARCH}.tar.gz"
+	curl --progress-bar -L --fail --retry 4 -O "$ALPINE_URL"
+	rootfs="alpine-minirootfs-$ALPINE_VER-$SETARCH.tar.gz"
 }
 
 # Utility function to get SHA
 
 getsha() {
 	printf "\n${blue} [*] Getting SHA ... $reset\n\n"
-	curl --progress-bar -L --fail --retry 4 -O "${URL}.sha256"
+	curl --progress-bar -L --fail --retry 4 -O "${ALPINE_URL}.sha256"
 }
 
 # Utility function to check integrity
@@ -125,11 +122,17 @@ extract() {
 # Utility function for login file
 
 createloginfile() {
-	bin=${usrbin}/startalpine
+	bin=${PREFIX}/bin/startalpine
 	cat > $bin <<- EOM
-#!$usrbin/bash -e
+#!/data/data/com.termux/files/usr/bin/bash -e
 unset LD_PRELOAD
-exec proot --link2symlink -0 -r ${HOME}/TermuxAlpine/ -b /dev/ -b /sys/ -b /proc/ -b /storage/ -b $HOME -w $HOME /usr/bin/env -i HOME=/root TERM="$TERM" LANG=$LANG PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/sh --login
+# thnx to @j16180339887 for DNS picker
+addresolvconf ()
+{ 
+  [ $(command -v getprop) ] && getprop | sed -n -e 's/^\[net\.dns.\]: \[\(.*\)\]/\1/p' | sed '/^\s*$/d' | sed 's/^/nameserver /' > $HOME/TermuxAlpine/etc/resolv.conf
+}
+addresolvconf
+exec proot --link2symlink -0 -r ${HOME}/TermuxAlpine/ -b /dev/ -b /sys/ -b /proc/ -b /storage/ -b $HOME -w $HOME /usr/bin/env HOME=/root TERM="$TERM" LANG=$LANG PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/sh --login
 EOM
 
 	chmod 700 $bin
@@ -138,9 +141,8 @@ EOM
 # Utility function to touchup Alpine
 
 finalwork() {
-	[ ! -e ${HOME}/finaltouchup.sh ] && curl --silent -L https://raw.githubusercontent.com/Hax4us/TermuxAlpine/master/finaltouchup.sh | \
-		sed -e "s,^!#.*bash,$usrbin/bash,g" > finaltouchup.sh
-chmod +x finaltouchup.sh && ./finaltouchup.sh
+	[ ! -e ${HOME}/finaltouchup.sh ] && curl --silent -LO https://raw.githubusercontent.com/Hax4us/TermuxAlpine/master/finaltouchup.sh
+chmod +x ${HOME}/finaltouchup.sh && ${HOME}/finaltouchup.sh
 }
 
 
@@ -154,9 +156,8 @@ cleanup() {
 		printf "$red not installed so not removed${reset}\n"
 		exit
 	fi
-	spgm=$(type -p startalpine)
-	if [ $? -eq 0 ]; then
-		rm $spgm
+	if [ -e $PREFIX/bin/startalpine ]; then
+		rm $PREFIX/bin/startalpine
 		printf "$yellow uninstalled :) ${reset}\n"
 		exit
 	else
@@ -166,22 +167,31 @@ cleanup() {
 
 printline() {
 	printf "${blue}\n"
-	echo " #-----------------------------------------------#"
+	echo " #------------------------------------------#"
+}
+
+usage() {
+	printf "$red use ${yellow}bash TermuxAlpine.sh --uninstall\n"
+	exit 1
 }
 
 # Start
 clear
-#EXTRAARGS="default"
-#if [[ ! -z $1 ]]
-#	then
-#EXTRAARGS=$1
-#if [[ $EXTRAARGS = "uninstall" ]]
-#	then
-#		cleanup
-#		exit
-#		fi
-#		fi
-printf "\n${yellow} You are going to install Alpine in termux ;) Cool\n Only 1mb ? Yes\n\n"
+EXTRAARGS="default"
+if [[ ! -z "$1" ]]
+	then
+	EXTRAARGS=$1
+fi
+if [[ $EXTRAARGS = "--uninstall" ]]
+then
+	cleanup
+	exit
+
+elif [ $# -ge 1 ]
+then
+	usage
+else
+printf "\n${yellow} You are going to install Alpine in termux ;) Cool\n Only 1mb Yes to continue\n\n"
 
 checksysinfo
 checkdeps
@@ -198,8 +208,11 @@ printline
 printf "\n${yellow} Now you can enjoy a very small (just 1 MB!) Linux environment in your Termux :)\n Don't forget to like my hard work for termux and many other things\n"
 printline
 printline
-printf "\n${blue} [∆] My official email:${yellow}		lokesh@hax4us.com\n"
-printf "$blue [∆] My website:${yellow}		https://hax4us.com\n"
-printf "$blue [∆] My YouTube channel:${yellow}	https://youtube.com/hax4us\n"
+printf "\n${blue} [*] Email   :${yellow}    lkpandey950@gmail.com\n"
+printf "$blue [*] Website :${yellow}    https://hax4us.com\n"
+printf "$blue [*] YouTube :${yellow}    https://youtube.com/hax4us\n"
+printline
+printf "$red \n NOTE : $yellow use ${red}--uninstall${yellow} option for uninstall\n"
 printline
 printf "$reset"
+fi
