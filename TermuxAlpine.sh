@@ -129,7 +129,10 @@ unset LD_PRELOAD
 # thnx to @j16180339887 for DNS picker
 addresolvconf ()
 { 
-  [ $(command -v getprop) ] && getprop | sed -n -e 's/^\[net\.dns.\]: \[\(.*\)\]/\1/p' | sed '/^\s*$/d' | sed 's/^/nameserver /' > $HOME/TermuxAlpine/etc/resolv.conf
+  [ $(command -v getprop) ] && getprop | sed -n -e 's/^\[net\.dns.\]: \[\(.*\)\]/\1/p' | sed '/^\s*$/d' | sed 's/^/nameserver /' > ${DESTINATION}/etc/resolv.conf
+  if [ ! -s ${DESTINATION}/etc/resolv.conf ]; then
+	printf '\nnameserver 8.8.8.8\nnameserver 8.8.4.4' > ${DESTINATION}/etc/resolv.conf
+  fi
 }
 addresolvconf
 exec proot --link2symlink -0 -r ${HOME}/TermuxAlpine/ -b /dev/ -b /sys/ -b /proc/ -b /storage/ -b $HOME -w $HOME /usr/bin/env HOME=/root TERM="$TERM" LANG=$LANG PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/sh --login
