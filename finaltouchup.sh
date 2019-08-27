@@ -5,7 +5,7 @@ addprofile()
 	export CHARSET=UTF-8
 	export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 	export PAGER=less
-	export PS1='[termux@alpine \W]\\$ '
+	export PS1='[\u@\h \W]\\$ '
 	umask 022
 	for script in /etc/profile.d/*.sh ; do
 	if [ -r \$script ] ; then
