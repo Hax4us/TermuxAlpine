@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash -e
-# Copyright Â©2018 by Hax4Us. All rights reserved.  ðŸŒŽ ðŸŒ ðŸŒ ðŸŒ ðŸ—º
+# Copyright ©2019 by Hax4Us. All rights reserved.
 #
-# https://hax4us.com
+# Email : lkpandey950@gmail.com
 ################################################################################
 
 # colors
@@ -128,11 +128,14 @@ createloginfile() {
 unset LD_PRELOAD
 # thnx to @j16180339887 for DNS picker
 addresolvconf ()
-{ 
-  [ $(command -v getprop) ] && getprop | sed -n -e 's/^\[net\.dns.\]: \[\(.*\)\]/\1/p' | sed '/^\s*$/d' | sed 's/^/nameserver /' > $HOME/TermuxAlpine/etc/resolv.conf
+{
+  android=\$(getprop ro.build.version.release)
+  if [ \${android%%.*} -lt 8 ]; then
+  [ \$(command -v getprop) ] && getprop | sed -n -e 's/^\[net\.dns.\]: \[\(.*\)\]/\1/p' | sed '/^\s*$/d' | sed 's/^/nameserver /' > \$HOME/TermuxAlpine/etc/resolv.conf
+  fi
 }
 addresolvconf
-exec proot --link2symlink -0 -r ${HOME}/TermuxAlpine/ -b /dev/ -b /sys/ -b /proc/ -b /storage/ -b $HOME -w $HOME /usr/bin/env HOME=/root TERM="$TERM" LANG=$LANG PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/sh --login
+exec proot --link2symlink -0 -r \${HOME}/TermuxAlpine/ -b /dev/ -b /sys/ -b /proc/ -b /storage/ -b \$HOME -w \$HOME /usr/bin/env HOME=/root TERM="\$TERM" LANG=\$LANG PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/sh --login
 EOM
 
 	chmod 700 $bin
@@ -171,18 +174,18 @@ printline() {
 }
 
 usage() {
-	printf "$red use ${yellow}bash TermuxAlpine.sh --uninstall\n"
+	printf "$red use ${yellow}bash TermuxAlpine.sh --uninstall ${reset}\n"
 	exit 1
 }
 
 # Start
 clear
 EXTRAARGS="default"
-if [[ ! -z "$1" ]]
+if [ ! -z "$1" ]
 	then
 	EXTRAARGS=$1
 fi
-if [[ $EXTRAARGS = "--uninstall" ]]
+if [ $EXTRAARGS = "--uninstall" ]
 then
 	cleanup
 	exit
@@ -191,7 +194,8 @@ elif [ $# -ge 1 ]
 then
 	usage
 else
-printf "\n${yellow} You are going to install Alpine in termux ;) Cool\n Only 1mb Yes to continue\n\n"
+printf "\n${yellow} You are going to install Alpine in termux ;) Cool\n press ENTER to continue\n\n"
+read enter
 
 checksysinfo
 checkdeps
@@ -205,7 +209,7 @@ printf "$blue [*] Configuring Alpine For You ..."
 cd; finalwork
 
 printline
-printf "\n${yellow} Now you can enjoy a very small (just 1 MB!) Linux environment in your Termux :)\n Don't forget to like my hard work for termux and many other things\n"
+printf "\n${yellow} Now you can enjoy a very small (just 1 MB!) Linux environment in your Termux :)\n Don't forget to star my work\n"
 printline
 printline
 printf "\n${blue} [*] Email   :${yellow}    lkpandey950@gmail.com\n"

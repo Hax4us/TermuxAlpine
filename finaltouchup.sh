@@ -5,7 +5,7 @@ addprofile()
 	export CHARSET=UTF-8
 	export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 	export PAGER=less
-	export PS1='[\u@\h \W]\\$ '
+	export PS1='[termux@alpine \W]\\$ '
 	umask 022
 	for script in /etc/profile.d/*.sh ; do
 	if [ -r \$script ] ; then
@@ -38,12 +38,14 @@ updrepos() {
 	EOM
 }
 # thnx to @j16180339887 for DNS picker 
-#addresolvconf ()
-#{
-#	[ $(command -v getprop) ] && getprop | sed -n -e 's/^\[net\.dns.\]: \[\(.*\)\]/\1/p' | sed '/^\s*$/d' | sed 's/^/nameserver /' > $HOME/TermuxAlpine/etc/resolv.conf
-#}
-
+addresolvconf ()
+{
+	printf "nameserver 8.8.8.8\nnameserver 8.8.4.4" > $HOME/TermuxAlpine/etc/resolv.conf
+}
+android=$(getprop ro.build.version.release)
 addprofile
 addmotd
-#addresolvconf
+if [ ${android%%.*} -ge 8 ]; then
+	addresolvconf
+fi
 updrepos
