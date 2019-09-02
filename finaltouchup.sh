@@ -44,7 +44,9 @@ addresolvconf ()
 }
 android=$(getprop ro.build.version.release)
 addprofile
-addmotd
+if [ ${1} = "--add-motd" ]; then
+	addmotd
+fi
 if [ ${android%%.*} -ge 8 ]; then
 	addresolvconf
 fi

@@ -145,7 +145,11 @@ EOM
 
 finalwork() {
 	[ ! -e ${HOME}/finaltouchup.sh ] && curl --silent -LO https://raw.githubusercontent.com/Hax4us/TermuxAlpine/master/finaltouchup.sh
-chmod +x ${HOME}/finaltouchup.sh && ${HOME}/finaltouchup.sh
+	if [ "${MOTD}" = "ON" ]; then
+		bash ${HOME}/finaltouchup.sh --add-motd
+	else
+		bash ${HOME}/finaltouchup.sh
+	fi
 }
 
 
@@ -174,22 +178,23 @@ printline() {
 }
 
 usage() {
-	printf "$red use ${yellow}bash TermuxAlpine.sh --uninstall ${reset}\n"
+	printf "${yellow}\nUsage: ${green}bash TermuxAlpine.sh [option]\n${blue}  --uninstall		uninstall alpine\n  --add-motd		create motd file\n${reset}\n"
 	exit 1
 }
 
 # Start
 clear
+MOTD="OFF"
 EXTRAARGS="default"
 if [ ! -z "$1" ]
 	then
 	EXTRAARGS=$1
 fi
-if [ $EXTRAARGS = "--uninstall" ]
-then
+if [ "$EXTRAARGS" = "--uninstall" ]; then
 	cleanup
 	exit
-
+elif [ "$EXTRARGS" = "--add-motd"  ]; then
+	MOTD="ON"
 elif [ $# -ge 1 ]
 then
 	usage
