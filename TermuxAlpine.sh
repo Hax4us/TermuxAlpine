@@ -193,11 +193,10 @@ printline() {
 
 usage() {
 	printf "${yellow}\nUsage: ${green}bash TermuxAlpine.sh [option]\n${blue}  --uninstall		uninstall alpine\n  --add-motd		create motd file\n${reset}\n"
-	exit 1
 }
 
 # Start
-clear
+
 MOTD="OFF"
 EXTRAARGS="default"
 if [ ! -z "$1" ]
@@ -207,12 +206,13 @@ fi
 if [ "$EXTRAARGS" = "--uninstall" ]; then
 	cleanup
 	exit 1
-elif [ "$EXTRARGS" = "--add-motd"  ]; then
+elif [ "$EXTRAARGS" = "--add-motd"  ]; then
 	MOTD="ON"
 elif [ $# -ge 1 ]
 then
 	usage
-else
+	exit 1
+fi
 printf "\n${yellow} You are going to install Alpine in termux ;) Cool\n press ENTER to continue\n"
 read enter
 
@@ -237,4 +237,3 @@ printline
 printf "$red \n NOTE : $yellow use ${red}--uninstall${yellow} option for uninstall\n"
 printline
 printf "$reset"
-fi
