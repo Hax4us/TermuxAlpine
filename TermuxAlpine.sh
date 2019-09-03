@@ -12,9 +12,9 @@ blue='\033[1;34m'
 reset='\033[0m'
 
 
-# Destination
+# Destination Path
 
-DESTINATION=${HOME}/TermuxAlpine
+DESTINATION=${PREFIX}/share/TermuxAlpine
 choice=""
 if [ -d ${DESTINATION} ]; then
 	printf "${red}[!] ${yellow}Alpine is already installed\nDo you want to reinstall ? (type \"y\" for yes or \"n\" for no) :${reset} "
@@ -29,8 +29,8 @@ if [ -d ${DESTINATION} ]; then
 	fi
 
 fi
-mkdir $DESTINATION
-cd $DESTINATION
+mkdir ${DESTINATION}
+cd ${DESTINATION}
 
 # Utility function for Unknown Arch
 
@@ -73,7 +73,7 @@ checkdeps() {
 	echo " [*] Checking for all required tools..."
 
 	for i in proot bsdtar curl; do
-		if [ -e $PREFIX/bin/$i ]; then
+		if [ -e ${PREFIX}/bin/$i ]; then
 			echo " • $i is OK"
 		else
 			echo "Installing ${i}..."
@@ -144,11 +144,11 @@ addresolvconf ()
 {
   android=\$(getprop ro.build.version.release)
   if [ \${android%%.*} -lt 8 ]; then
-  [ \$(command -v getprop) ] && getprop | sed -n -e 's/^\[net\.dns.\]: \[\(.*\)\]/\1/p' | sed '/^\s*$/d' | sed 's/^/nameserver /' > \$HOME/TermuxAlpine/etc/resolv.conf
+  [ \$(command -v getprop) ] && getprop | sed -n -e 's/^\[net\.dns.\]: \[\(.*\)\]/\1/p' | sed '/^\s*$/d' | sed 's/^/nameserver /' > \${PREFIX}/share/TermuxAlpine/etc/resolv.conf
   fi
 }
 addresolvconf
-exec proot --link2symlink -0 -r \${HOME}/TermuxAlpine/ -b /dev/ -b /sys/ -b /proc/ -b /sdcard -b \$HOME -w \$HOME /usr/bin/env HOME=/root PREFIX=/usr SHELL=/bin/sh TERM="\$TERM" LANG=\$LANG PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/sh --login
+exec proot --link2symlink -0 -r \${PREFIX}/share/TermuxAlpine/ -b /dev/ -b /sys/ -b /proc/ -b /sdcard -b \$HOME -w /home /usr/bin/env HOME=/root PREFIX=/usr SHELL=/bin/sh TERM="\$TERM" LANG=\$LANG PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/sh --login
 EOM
 
 	chmod 700 $bin
@@ -157,12 +157,13 @@ EOM
 # Utility function to touchup Alpine
 
 finalwork() {
-	[ ! -e ${HOME}/finaltouchup.sh ] && curl --silent -LO https://raw.githubusercontent.com/Hax4us/TermuxAlpine/master/finaltouchup.sh
+	[ ! -e ${DESTINATION}/finaltouchup.sh ] && curl --silent -LO https://raw.githubusercontent.com/Hax4us/TermuxAlpine/master/finaltouchup.sh
 	if [ "${MOTD}" = "ON" ]; then
-		bash ${HOME}/finaltouchup.sh --add-motd
+		bash ${DESTINATION}/finaltouchup.sh --add-motd
 	else
-		bash ${HOME}/finaltouchup.sh
+		bash ${DESTINATION}/finaltouchup.sh
 	fi
+	rm ${DESTINATION}/finaltouchup.sh
 }
 
 
@@ -170,14 +171,14 @@ finalwork() {
 # Utility function for cleanup
 
 cleanup() {
-	if [ -d $DESTINATION ]; then
-		rm -rf $DESTINATION
+	if [ -d ${DESTINATION} ]; then
+		rm -rf ${DESTINATION}
 	else
 		printf "$red not installed so not removed${reset}\n"
 		exit
 	fi
-	if [ -e $PREFIX/bin/startalpine ]; then
-		rm $PREFIX/bin/startalpine
+	if [ -e ${PREFIX}/bin/startalpine ]; then
+		rm ${PREFIX}/bin/startalpine
 		printf "$yellow uninstalled :) ${reset}\n"
 		exit
 	else
@@ -224,8 +225,7 @@ extract
 createloginfile
 
 printf "$blue [*] Configuring Alpine For You ..."
-cd; finalwork
-
+finalwork
 printline
 printf "\n${yellow} Now you can enjoy a very small (just 1 MB!) Linux environment in your Termux :)\n Don't forget to star my work\n"
 printline
