@@ -13,7 +13,7 @@ This Termux bash setup shell script will attempt to set Alpine Linux up in your 
 1. First goto home directory
 `cd $HOME`
 2. Get the script
-`curl -LO https://raw.githubusercontent.com/ng1nx4O4/TermuxAlpine/master/TermuxAlpine.sh`
+`curl -LO https://raw.githubusercontent.com/Hax4us/TermuxAlpine/master/TermuxAlpine.sh`
 3. Execute the script
 `bash TermuxAlpine.sh`
 4. Start Alpine
@@ -36,6 +36,6 @@ after installation | Around 80 MB | Around 2000 MB | Around 1200 MB
 #### here is full usage details of apk https://wiki.alpinelinux.org/wiki/Alpine_Linux_package_management
 
 
-Comments are welcome at https://github.com/ng1nX4O4/TermuxAlpine/issues ✍
+Comments are welcome at https://github.com/Hax4us/TermuxAlpine/issues ✍
 
-Pull requests are welcome https://github.com/ng1nX4O4/TermuxAlpine/pulls ✍
+Pull requests are welcome https://github.com/Hax4us/TermuxAlpine/pulls ✍
