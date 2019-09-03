@@ -14,7 +14,7 @@ reset='\033[0m'
 
 # Destination
 
-DESTINATION=${HOME}/TermuxAlpine
+DESTINATION=${PREFIX}/share/TermuxAlpine
 choice=""
 if [ -d ${DESTINATION} ]; then
 	printf "${red}[!] ${yellow}Alpine is already installed\nDo you want to reinstall ? (type \"y\" for yes or \"n\" for no) :${reset} "
@@ -29,7 +29,7 @@ if [ -d ${DESTINATION} ]; then
 	fi
 
 fi
-mkdir $DESTINATION
+mkdir -p $DESTINATION
 cd $DESTINATION
 
 # Utility function for Unknown Arch
@@ -148,7 +148,7 @@ addresolvconf ()
   fi
 }
 addresolvconf
-exec proot --link2symlink -0 -r \${HOME}/TermuxAlpine/ -b /dev/ -b /sys/ -b /proc/ -b /sdcard -b \$HOME -w \$HOME /usr/bin/env HOME=/root PREFIX=/usr SHELL=/bin/sh TERM="\$TERM" LANG=\$LANG PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/sh --login
+exec proot --link2symlink -0 -r \${PREFIX}/TermuxAlpine/ -b /dev/ -b /sys/ -b /proc/ -b /sdcard -b \$HOME -w \$HOME /usr/bin/env HOME=/root PREFIX=/usr SHELL=/bin/sh TERM="\$TERM" LANG=\$LANG PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/sh --login
 EOM
 
 	chmod 700 $bin
