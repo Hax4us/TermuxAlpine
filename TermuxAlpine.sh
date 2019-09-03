@@ -15,7 +15,20 @@ reset='\033[0m'
 # Destination
 
 DESTINATION=${HOME}/TermuxAlpine
-[ -d $DESTINATION ] && rm -rf $DESTINATION
+choice=""
+if [ -d ${DESTINATION} ]; then
+	printf "${red}[!] ${yellow}Alpine is already installed\nDo you want to reinstall ? (type \"y\" for yes or \"n\" for no) :${reset} "
+	read choice
+	if [ "${choice}" = "y" ]; then
+		rm -rf ${DESTINATION}
+	elif [ "${choice}" = "n" ]; then
+		exit 1
+	else
+		printf "${red}[!] Wrong input${reset}"
+		exit 1
+	fi
+
+fi
 mkdir $DESTINATION
 cd $DESTINATION
 
@@ -192,14 +205,14 @@ if [ ! -z "$1" ]
 fi
 if [ "$EXTRAARGS" = "--uninstall" ]; then
 	cleanup
-	exit
+	exit 1
 elif [ "$EXTRARGS" = "--add-motd"  ]; then
 	MOTD="ON"
 elif [ $# -ge 1 ]
 then
 	usage
 else
-printf "\n${yellow} You are going to install Alpine in termux ;) Cool\n press ENTER to continue\n\n"
+printf "\n${yellow} You are going to install Alpine in termux ;) Cool\n press ENTER to continue\n"
 read enter
 
 checksysinfo
