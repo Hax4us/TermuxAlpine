@@ -14,7 +14,7 @@ reset='\033[0m'
 
 # Destination
 
-DESTINATION=${HOME}/TermuxAlpine
+DESTINATION=${PREFIX}/share/TermuxAlpine
 choice=""
 if [ -d ${DESTINATION} ]; then
 	printf "${red}[!] ${yellow}Alpine is already installed\nDo you want to reinstall ? (type \"y\" for yes or \"n\" for no) :${reset} "
@@ -29,7 +29,7 @@ if [ -d ${DESTINATION} ]; then
 	fi
 
 fi
-mkdir $DESTINATION
+mkdir -p $DESTINATION
 cd $DESTINATION
 
 # Utility function for Unknown Arch
@@ -148,7 +148,7 @@ addresolvconf ()
   fi
 }
 addresolvconf
-exec proot --link2symlink -0 -r \${HOME}/TermuxAlpine/ -b /dev/ -b /sys/ -b /proc/ -b /sdcard -b \$HOME -w \$HOME /usr/bin/env HOME=/root PREFIX=/usr SHELL=/bin/sh TERM="\$TERM" LANG=\$LANG PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/sh --login
+exec proot --link2symlink -0 -r \${PREFIX}/share/TermuxAlpine/ -b /dev/ -b /sys/ -b /proc/ -b /sdcard -b \$HOME -w \$HOME /usr/bin/env HOME=/root PREFIX=/usr SHELL=/bin/sh TERM="\$TERM" LANG=\$LANG PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/sh --login
 EOM
 
 	chmod 700 $bin
@@ -157,11 +157,11 @@ EOM
 # Utility function to touchup Alpine
 
 finalwork() {
-	[ ! -e ${HOME}/finaltouchup.sh ] && curl --silent -LO https://raw.githubusercontent.com/Hax4us/TermuxAlpine/master/finaltouchup.sh
+	[ ! -e ${PREFIX}/share/finaltouchup.sh ] && curl --silent -LO https://raw.githubusercontent.com/Hax4us/TermuxAlpine/master/finaltouchup.sh
 	if [ "${MOTD}" = "ON" ]; then
-		bash ${HOME}/finaltouchup.sh --add-motd
+		bash ${PREFIX}/share/finaltouchup.sh --add-motd
 	else
-		bash ${HOME}/finaltouchup.sh
+		bash ${PREFIX}/share/finaltouchup.sh
 	fi
 }
 

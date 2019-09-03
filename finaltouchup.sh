@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 addprofile()
 {
-	cat > $HOME/TermuxAlpine/etc/profile <<- EOM
+	cat > $PREFIX/share/TermuxAlpine/etc/profile <<- EOM
 	export CHARSET=UTF-8
 	export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 	export PAGER=less
@@ -16,7 +16,7 @@ addprofile()
 }
 
 addmotd() {
-	cat > $HOME/TermuxAlpine/etc/profile.d/motd.sh  <<- EOM
+	cat > $PREFIX/share/TermuxAlpine/etc/profile.d/motd.sh  <<- EOM
 	printf "\n\033[1;34mWelcome to Alpine Linux in Termux!  Enjoy!\033[0m\033[1;34m
 	Chat:    \033[0m\033[mhttps://gitter.im/termux/termux/\033[0m\033[1;34m
 		Help:    \033[0m\033[34minfo <query> \033[0m\033[mand \033[0m\033[34mman <query> \033[0m\033[1;34m
@@ -30,8 +30,8 @@ addmotd() {
 }
 
 updrepos() {
-	cp $HOME/TermuxAlpine/etc/apk/repositories $HOME/TermuxAlpine/etc/apk/repositories.bak
-	cat > $HOME/TermuxAlpine/etc/apk/repositories <<- EOM
+	cp $PREFIX/share/TermuxAlpine/etc/apk/repositories $PREFIX/share/TermuxAlpine/etc/apk/repositories.bak
+	cat > $PREFIX/share/TermuxAlpine/etc/apk/repositories <<- EOM
 	http://dl-cdn.alpinelinux.org/alpine/latest-stable/main/
 	http://dl-cdn.alpinelinux.org/alpine/latest-stable/community/
 	http://dl-cdn.alpinelinux.org/alpine/edge/testing/
@@ -40,7 +40,7 @@ updrepos() {
 # thnx to @j16180339887 for DNS picker 
 addresolvconf ()
 {
-	printf "nameserver 8.8.8.8\nnameserver 8.8.4.4" > $HOME/TermuxAlpine/etc/resolv.conf
+	printf "nameserver 8.8.8.8\nnameserver 8.8.4.4" > $PREFIX/share/TermuxAlpine/etc/resolv.conf
 }
 android=$(getprop ro.build.version.release)
 addprofile
