@@ -38,4 +38,4 @@ after installation | Around 80 MB | Around 2000 MB | Around 1200 MB
 
 Comments are welcome at https://github.com/Hax4us/TermuxAlpine/issues ✍
 
-Pull requests are welcome https://github.com/Hax4us/TermuxAlpine/pulls ✍
+Pull requests are welcome at https://github.com/Hax4us/TermuxAlpine/pulls ✍
