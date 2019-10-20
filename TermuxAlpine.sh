@@ -52,7 +52,7 @@ checksysinfo() {
 		armeabi|armeabi-v7a)
 			SETARCH=armhf
 			;;
-		x86)
+		x86|i686)
 			SETARCH=x86
 			;;
 		x86_64)
