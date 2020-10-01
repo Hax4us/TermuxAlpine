@@ -10,7 +10,7 @@
 This Termux bash setup shell script will attempt to set Alpine Linux up in your Termux environment.
 
 ## _Steps For Installation_
-1. First goto home directory
+1. First go to home directory
 `cd $HOME`
 2. Get the script
 `curl -LO https://raw.githubusercontent.com/Hax4us/TermuxAlpine/master/TermuxAlpine.sh`
