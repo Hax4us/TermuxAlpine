@@ -15,7 +15,7 @@ This Termux bash setup shell script will attempt to set Alpine Linux up in your 
 2. Get the script
 `curl -LO https://raw.githubusercontent.com/Hax4us/TermuxAlpine/master/TermuxAlpine.sh`
 3. Execute the script
-`bash TermuxAlpine.sh`
+`sh TermuxAlpine.sh`
 4. Start Alpine
 `startalpine`
 5. For exit just execute
