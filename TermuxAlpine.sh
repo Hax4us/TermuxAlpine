@@ -142,10 +142,7 @@ unset LD_PRELOAD
 # thnx to @j16180339887 for DNS picker
 addresolvconf ()
 {
-  android=\$(getprop ro.build.version.release)
-  if [ \${android%%.*} -lt 8 ]; then
-  [ \$(command -v getprop) ] && getprop | sed -n -e 's/^\[net\.dns.\]: \[\(.*\)\]/\1/p' | sed '/^\s*$/d' | sed 's/^/nameserver /' > \${PREFIX}/share/TermuxAlpine/etc/resolv.conf
-  fi
+  cp \${PREFIX}/etc/resolv.conf \${PREFIX}/share/TermuxAlpine/etc/resolv.conf
 }
 addresolvconf
 exec proot --link2symlink -0 -r \${PREFIX}/share/TermuxAlpine/ -b /dev/ -b /sys/ -b /proc/ -b /sdcard -b /storage -b \$HOME -w /home /usr/bin/env TMPDIR=/tmp HOME=/home PREFIX=/usr SHELL=/bin/sh TERM="\$TERM" LANG=\$LANG PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/sh --login
