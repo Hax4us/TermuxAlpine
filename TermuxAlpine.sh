@@ -78,9 +78,7 @@ checkdeps() {
 		else
 			echo "Installing ${i}..."
 			apt install -y $i || {
-				printf "$red"
-				echo " ERROR: check your internet connection or apt\n Exiting..."
-				printf "$reset"
+				printf "$red ERROR: check your internet connection or apt\n Exiting...\n$reset"
 				exit 1
 			}
 		fi
